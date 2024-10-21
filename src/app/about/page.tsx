@@ -1,3 +1,6 @@
+import { getRequestContext } from '@cloudflare/next-on-pages';
+
+export const runtime = "edge";
 
 const state: any = { };
 
@@ -10,7 +13,8 @@ function setNum(num: number) {
 }
 
 export default
-function About() {
-  setNum(getNum() + 1);
-  return <div>你好，世界：{getNum()}</div>;
+async function About() {
+  const env: CloudflareEnv | any = getRequestContext().env;
+  const kv = env.jimao;
+  return <div>你好，世界：{await kv.get("count")}</div>;
 }
